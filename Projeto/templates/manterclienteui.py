@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import time
+import base64
 from service import Service
 
 class ManterClienteUI:
@@ -24,11 +25,14 @@ class ManterClienteUI:
         email = st.text_input("Informe o e-mail")
         fone = st.text_input("Informe o fone")
         senha = st.text_input("Informe a senha", type="password")
+        foto = st.file_uploader("Foto do cliente", type=["png", "jpg", "jpeg"], key="foto_cliente_novo")
         if st.button("Inserir"):
-            Service.cliente_inserir(nome, email, fone, senha)
-            st.success("Cliente inserido com sucesso")
-            time.sleep(2)
-            st.rerun()
+            try:
+                Service.cliente_inserir(nome, email, fone, senha, base64.b64encode(foto.getvalue()).decode() if foto else None)
+                st.success("Cliente inserido com sucesso")
+                st.rerun()
+            except ValueError as erro:
+                st.error(str(erro))
     def atualizar():
         clientes = Service.cliente_listar()
         if len(clientes) == 0: st.write("Nenhum cliente cadastrado")
@@ -38,12 +42,15 @@ class ManterClienteUI:
             email = st.text_input("Novo e-mail", op.get_email())
             fone = st.text_input("Novo fone", op.get_fone())
             senha = st.text_input("Nova senha", op.get_senha(), type="password")
+            foto = st.file_uploader("Alterar foto", type=["png", "jpg", "jpeg"], key="foto_cliente_editar")
             if st.button("Atualizar"):
                 id = op.get_id()
-                Service.cliente_atualizar(id, nome, email, fone, senha)
-                st.success("Cliente atualizado com sucesso")
-                time.sleep(2)
-                st.rerun()                
+                try:
+                    Service.cliente_atualizar(id, nome, email, fone, senha, base64.b64encode(foto.getvalue()).decode() if foto else op.get_foto())
+                    st.success("Cliente atualizado com sucesso")
+                    st.rerun()
+                except ValueError as erro:
+                    st.error(str(erro))                
     def excluir():
         clientes = Service.cliente_listar()
         if len(clientes) == 0: st.write("Nenhum cliente cadastrado")

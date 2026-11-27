@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import time
+import base64
 from service import Service
 
 class ManterProfissionalUI:
@@ -26,11 +27,14 @@ class ManterProfissionalUI:
         email = st.text_input("Informe o e-mail")
         especialidade = st.text_input("Informe a especialidade")
         senha = st.text_input("Informe a senha", type="password")
+        foto = st.file_uploader("Foto do profissional", type=["png", "jpg", "jpeg"], key="foto_prof_novo")
         if st.button("Inserir"):
-            Service.profissional_inserir(nome, email, especialidade, senha)
-            st.success("Profissional inserido com sucesso")
-            time.sleep(2)
-            st.rerun()
+            try:
+                Service.profissional_inserir(nome, email, especialidade, senha, base64.b64encode(foto.getvalue()).decode() if foto else None)
+                st.success("Profissional inserido com sucesso")
+                st.rerun()
+            except ValueError as erro:
+                st.error(str(erro))
 
     def atualizar():
         profissionais = Service.profissional_listar()
@@ -41,13 +45,16 @@ class ManterProfissionalUI:
             email = st.text_input("Informe o novo email", op.get_email())
             especialidade = st.text_input("Informe a nova especialidade", op.get_especialidade())
             senha = st.text_input("Nova senha", op.get_senha(), type="password")
+            foto = st.file_uploader("Alterar foto", type=["png", "jpg", "jpeg"], key="foto_prof_editar")
 
             if st.button("Atualizar"):
                 id = op.get_id()
-                Service.profissional_atualizar(id, nome, email, especialidade, senha)
-                st.success("Profissional atualizado com sucesso")
-                time.sleep(2)
-                st.rerun()
+                try:
+                    Service.profissional_atualizar(id, nome, email, especialidade, senha, base64.b64encode(foto.getvalue()).decode() if foto else op.get_foto())
+                    st.success("Profissional atualizado com sucesso")
+                    st.rerun()
+                except ValueError as erro:
+                    st.error(str(erro))
 
     def excluir():
         profissionais = Service.profissional_listar()

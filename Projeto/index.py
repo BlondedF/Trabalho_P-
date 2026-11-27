@@ -14,6 +14,8 @@ from templates.visualizarmeusservicosui import VisualizarMeusServicosUI
 from templates.visualizarminhaagendaui import VisualizarMinhaAgendaUI
 from templates.confirmarservicoui import ConfirmarServicoUI
 from service import Service
+from templates.relatoriosui import RelatoriosUI, AgendaSemanaUI
+from templates.cancelaragendamentoui import CancelarAgendamentoUI
 import streamlit as st
 
 class IndexUI:
@@ -24,26 +26,30 @@ class IndexUI:
         if op == "Abrir Conta": AbrirContaUI.main()
 
     def menu_cliente():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Agendar Serviço", "Meus Serviços"])
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Agendar Serviço", "Meus Serviços", "Cancelar agendamento"])
         if op == "Meus Dados": PerfilClienteUI.main()
         if op == "Agendar Serviço": AgendarServicoUI.main()
         if op == "Meus Serviços": VisualizarMeusServicosUI.main()
+        if op == "Cancelar agendamento": CancelarAgendamentoUI.main()
 
     def menu_profissional():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Abrir Agenda", "Minha Agenda", "Confirmar Serviço"])
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Abrir Agenda", "Minha Agenda", "Confirmar Serviço", "Totalizar meus atendimentos"])
         if op == "Meus Dados": PerfilProfissionalUI.main()
         if op == "Abrir Agenda": AbrirMinhaAgendaUI.main()
         if op == "Minha Agenda": VisualizarMinhaAgendaUI.main()
         if op == "Confirmar Serviço": ConfirmarServicoUI.main()
+        if op == "Totalizar meus atendimentos": RelatoriosUI.meus_atendimentos()
 
     def menu_admin():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Clientes", "Serviços", "Horários", "Profissionais", "Atendimentos"])
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Clientes", "Serviços", "Horários", "Profissionais", "Atendimentos", "Totalizar profissionais", "Agenda da semana"])
         if op == "Meus Dados": PerfilAdminUI.main()
         if op == "Clientes": ManterClienteUI.main()
         if op == "Serviços": ManterServicoUI.main()
         if op == "Horários": ManterHorarioUI.main()
         if op == "Profissionais": ManterProfissionalUI.main()
         if op == "Atendimentos": ManterAtendimentoUI.main()
+        if op == "Totalizar profissionais": RelatoriosUI.total_profissionais()
+        if op == "Agenda da semana": AgendaSemanaUI.main()
 
     def sair_do_sistema():
         if st.sidebar.button("Sair"):
@@ -64,6 +70,10 @@ class IndexUI:
             IndexUI.sair_do_sistema()
 
     def main():
+        from dao_sql.database import Database
+        Database.abrir()
+        Database.criar_tabelas()
+        Database.fechar()
         # verifica a existe o usuário admin
         Service.cliente_criar_admin()
         # monta o sidebar

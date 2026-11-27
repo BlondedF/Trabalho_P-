@@ -28,7 +28,8 @@ class Database:
                 nome TEXT NOT NULL,
                 email TEXT NOT NULL,
                 fone TEXT,
-                senha TEXT NOT NULL
+                senha TEXT NOT NULL,
+                foto TEXT
             );
         """)
 
@@ -39,9 +40,16 @@ class Database:
                 nome TEXT NOT NULL,
                 email TEXT NOT NULL,
                 especialidade TEXT NULL,
-                senha TEXT NOT NULL
+                senha TEXT NOT NULL,
+                foto TEXT
             );
         """)
+
+        # Migração para bancos já existentes
+        for tabela in ("cliente", "profissional"):
+            colunas = [linha[1] for linha in cls.conn.execute(f"PRAGMA table_info({tabela})").fetchall()]
+            if "foto" not in colunas:
+                cls.execute(f"ALTER TABLE {tabela} ADD COLUMN foto TEXT")
 
         # --------------------- Tabela Servico ---------------------
         cls.execute("""

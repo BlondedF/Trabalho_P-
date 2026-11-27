@@ -1,10 +1,11 @@
 class Profissional:
-    def __init__(self, id, nome, email, especialidade, senha):
+    def __init__(self, id, nome, email, especialidade, senha, foto=None):
         self.set_id(id)
         self.set_nome(nome)
         self.set_email(email)
         self.set_especialidade(especialidade)
         self.set_senha(senha)
+        self.__foto = foto
 
     def set_id(self, id):
         if id < 0:
@@ -46,6 +47,12 @@ class Profissional:
     def get_senha(self):
         return self.__senha
 
+    def get_foto(self):
+        return self.__foto
+
+    def set_foto(self, foto):
+        self.__foto = foto
+
     def __str__(self):
         return f"{self.__id} - {self.__nome} - {self.__email} - {self.__especialidade}"
 
@@ -55,7 +62,8 @@ class Profissional:
             "nome": self.__nome,
             "email": self.__email,
             "especialidade": self.__especialidade,
-            "senha": self.__senha
+            "senha": self.__senha,
+            "foto": self.__foto
         }
 
     def to_dict(self):
@@ -73,5 +81,6 @@ class Profissional:
             dic["nome"],
             dic["email"],
             dic["especialidade"],
-            dic["senha"]
+            dic["senha"],
+            dic.get("foto")
         )

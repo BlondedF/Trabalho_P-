@@ -40,7 +40,7 @@ class HorarioDAO(DAO):
             UPDATE horario SET data=?, confirmado=?, id_cliente=?, id_servico=?, id_profissional=?
             WHERE id=?
         """
-        cls.execute(sql, (obj.get_data(), obj.get_confirmado(), obj.get_id_cliente(), obj.get_id_servico(), obj.get_id_profissional(), obj.get_id()))
+        cls.execute(sql, (obj.get_data().isoformat(), obj.get_confirmado(), obj.get_id_cliente(), obj.get_id_servico(), obj.get_id_profissional(), obj.get_id()))
         cls.fechar()
 
     @classmethod

@@ -1,22 +1,16 @@
 import streamlit as st
 from service import Service
-import time
 
 class AbrirContaUI:
+    @staticmethod
     def main():
         st.header("Abrir Conta no Sistema")
-        nome = st.text_input("Informe o nome")
-        email = st.text_input("Informe o e-mail")
-        fone = st.text_input("Informe o fone")
-        senha = st.text_input("Informe a senha", type="password")
-        if st.button("Inserir"):
+        nome=st.text_input("Informe o nome")
+        email=st.text_input("Informe o e-mail")
+        fone=st.text_input("Informe o telefone")
+        senha=st.text_input("Informe a senha",type="password")
+        if st.button("Criar conta"):
             try:
-                Service.cliente_inserir(nome, email, fone, senha)
-
-            except ValueError as erro:
-                st.error(str(erro))
-        return
-
-    st.success("Conta criada com sucesso")
-    time.sleep(2)
-    st.rerun()
+                Service.cliente_inserir(nome,email,fone,senha)
+                st.success("Conta criada com sucesso! Agora você pode entrar no sistema.")
+            except ValueError as erro: st.error(str(erro))

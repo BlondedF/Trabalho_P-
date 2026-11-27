@@ -6,27 +6,27 @@ class ClienteDAO(DAO):
     def inserir(cls, obj):
         cls.abrir()
         sql = """
-            INSERT INTO cliente (nome, email, fone, senha)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO cliente (nome, email, fone, senha, foto)
+            VALUES (?, ?, ?, ?, ?)
         """
-        cls.execute(sql, (obj.get_nome(), obj.get_email(), obj.get_fone(), obj.get_senha()))
+        cls.execute(sql, (obj.get_nome(), obj.get_email(), obj.get_fone(), obj.get_senha(), obj.get_foto()))
         cls.fechar()
 
 
     @classmethod
     def listar(cls):
         cls.abrir()
-        sql = "SELECT * FROM cliente"
+        sql = "SELECT id, nome, email, fone, senha, foto FROM cliente"
         cursor = cls.execute(sql)
         rows = cursor.fetchall()
-        objs = [Cliente(id, nome, email, fone, senha) for (id, nome, email, fone, senha) in rows]
+        objs = [Cliente(id, nome, email, fone, senha, foto) for (id, nome, email, fone, senha, foto) in rows]
         cls.fechar()
         return objs
 
     @classmethod
     def listar_id(cls, id):
         cls.abrir()
-        sql = "SELECT * FROM cliente WHERE id = ?"
+        sql = "SELECT id, nome, email, fone, senha, foto FROM cliente WHERE id = ?"
         cursor = cls.execute(sql, (id,))
         row = cursor.fetchone()
         obj = Cliente(*row) if row else None
@@ -37,10 +37,10 @@ class ClienteDAO(DAO):
     def atualizar(cls, obj):
         cls.abrir()
         sql = """
-            UPDATE cliente SET nome=?, email=?, fone=?, senha=?
+            UPDATE cliente SET nome=?, email=?, fone=?, senha=?, foto=?
             WHERE id=?
         """
-        cls.execute(sql, (obj.get_nome(), obj.get_email(), obj.get_fone(), obj.get_senha(), obj.get_id()))
+        cls.execute(sql, (obj.get_nome(), obj.get_email(), obj.get_fone(), obj.get_senha(), obj.get_foto(), obj.get_id()))
         cls.fechar()
 
     @classmethod

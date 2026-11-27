@@ -22,7 +22,11 @@ class Atendimento:
     def get_id_horario(self): return self.__id_horario
 
     def set_id(self, id): self.__id = id
-    def set_data(self, data): self.__data = data
+    def set_data(self, data):
+        if isinstance(data, str):
+            try: data = datetime.fromisoformat(data)
+            except ValueError: data = datetime.strptime(data, "%d/%m/%Y %H:%M")
+        self.__data = data
     def set_queixa_principal(self, queixa_principal): self.__queixa_principal = queixa_principal
     def set_historico_saude(self, historico_saude): self.__historico_saude = historico_saude 
     def set_avaliacao(self, avaliacao): self.__avaliacao = avaliacao 

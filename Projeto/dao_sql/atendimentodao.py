@@ -9,7 +9,7 @@ class AtendimentoDAO(DAO):
             INSERT INTO atendimento (data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario)
             VALUES (?, ?, ?, ?, ?, ?)
         """
-        cls.execute(sql, (obj.get_data(), obj.get_queixa_principal(), obj.get_historico_saude(), obj.get_avaliacao(), obj.get_prescricao(), obj.get_id_horario()))
+        cls.execute(sql, (obj.get_data().isoformat(), obj.get_queixa_principal(), obj.get_historico_saude(), obj.get_avaliacao(), obj.get_prescricao(), obj.get_id_horario()))
         cls.fechar()
 
 
@@ -40,7 +40,7 @@ class AtendimentoDAO(DAO):
             UPDATE atendimento SET data=?, queixa_principal=?, historico_saude=?, avaliacao=?, prescricao=?, id_horario=?
             WHERE id=?
         """
-        cls.execute(sql, (obj.get_data(), obj.get_queixa_principal(), obj.get_historico_saude(), obj.get_avaliacao(), obj.get_prescricao(), obj.get_id_horario(), obj.get_id()))
+        cls.execute(sql, (obj.get_data().isoformat(), obj.get_queixa_principal(), obj.get_historico_saude(), obj.get_avaliacao(), obj.get_prescricao(), obj.get_id_horario(), obj.get_id()))
         cls.fechar()
 
     @classmethod
